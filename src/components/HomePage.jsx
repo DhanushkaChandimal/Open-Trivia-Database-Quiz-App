@@ -1,4 +1,5 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import axios from 'axios';
 import Container from 'react-bootstrap/Container';
 import Card from 'react-bootstrap/Card';
 import Form from 'react-bootstrap/Form';
@@ -13,6 +14,22 @@ const HomePage = () => {
         difficulty: ''
     });
 
+    const [difficulties, setDifficulties] = useState([]);
+
+    useEffect(() => {
+        axios.get('https://opentdb.com/api_category.php')
+        .then(response => {
+            // console.log(response);
+            // console.log(response.data);
+            // console.log(response.data.trivia_categories);
+            console.log(response.data.trivia_categories[0]);
+            setDifficulties(response.data.trivia_categories);
+        })
+        .catch(error => {
+            console.log(error);
+        });
+    }, []);
+
     const handleChange = (e) => {
         const { name, value } = e.target;
         setFormData({
@@ -20,6 +37,13 @@ const HomePage = () => {
             [name]: value
         });
     };
+
+    const categories = [
+        { value: '1', label: 'General Knowledge' },
+        { value: '2', label: 'Sports' },
+        { value: '3', label: 'History' },
+        { value: '4', label: 'Science & Nature' }
+    ];
     
     return (
         <Container className="d-flex vh-100 justify-content-center align-items-center bg-light">
@@ -56,11 +80,11 @@ const HomePage = () => {
                                 onChange={handleChange}
                                 required
                             >
-                                <option hidden value="">Select a category...</option>
-                                <option>General Knowledge</option>
-                                <option>Sports</option>
-                                <option>History</option>
-                                <option>Science & Nature</option>
+                                <option hidden value="">Select a category</option>
+                                {categories.map((cat) => (
+                                    <option key={cat.value} value={cat.value}>{cat.label}</option>
+                                ))}
+                                
                             </Form.Select>
 
                             <Form.Control.Feedback type="invalid">
@@ -77,9 +101,9 @@ const HomePage = () => {
                                 required
                             >
                                 <option hidden value="">Select a difficulty level</option>
-                                <option>Easy</option>
-                                <option>Medium</option>
-                                <option>Hard</option>
+                                {difficulties.map((level) => (
+                                    <option key={level.id} value={level.id}>{level.name}</option>
+                                ))}
                             </Form.Select>
 
                             <Form.Control.Feedback type="invalid">
