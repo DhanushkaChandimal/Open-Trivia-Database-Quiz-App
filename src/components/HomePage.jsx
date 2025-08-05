@@ -13,8 +13,10 @@ const HomePage = () => {
         category: '',
         difficulty: ''
     });
-    const [difficulties, setDifficulties] = useState([]);
+    const [categories, setCategories] = useState([]);
     const [error, setError] = useState('');
+    const [validated, setValidated] = useState(false);
+    const [questions, setQuestions] = useState([]);
 
     useEffect(() => {
         axios.get('https://opentdb.com/api_category.php')
@@ -23,7 +25,7 @@ const HomePage = () => {
             // console.log(response.data);
             // console.log(response.data.trivia_categories);
             // console.log(response.data.trivia_categories[0]);
-            setDifficulties(response.data.trivia_categories);
+            setCategories(response.data.trivia_categories);
         })
         .catch(error => {
             setError("Error fetching form data. Please contact an admin. " + error)
@@ -38,12 +40,34 @@ const HomePage = () => {
         });
     };
 
-    const categories = [
-        { value: '1', label: 'General Knowledge' },
-        { value: '2', label: 'Sports' },
-        { value: '3', label: 'History' },
-        { value: '4', label: 'Science & Nature' }
+    const difficulties = [
+        { value: 'easy', label: 'Easy' },
+        { value: 'medium', label: 'Medium' },
+        { value: 'hard', label: 'Hard' },
     ];
+
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+
+        const form = e.currentTarget;
+        if (form.checkValidity() === false) {
+            e.stopPropagation();
+        } else {
+            console.log(formData.category);
+            console.log(formData.difficulty);
+            axios.get(`https://opentdb.com/api.php?amount=10&category=${formData.category}&difficulty=${formData.difficulty}&type=multiple`)
+            .then(response => {
+                // console.log(response);
+                // console.log(response.data);
+                // console.log(response.data.results);
+                setQuestions(response.data.results);
+            })
+            .catch(error => {
+                setError("Error fetching form data. Please contact an admin. " + error)
+            });
+        }
+        setValidated(true);
+    };
     
     return (
         <Container className="d-flex vh-100 justify-content-center align-items-center bg-light">
@@ -54,7 +78,7 @@ const HomePage = () => {
 
                     {error && <Alert variant="danger">{error}</Alert>}
 
-                    <Form noValidate validated>
+                    <Form onSubmit={handleSubmit} noValidate validated={validated}>
                         <Form.Group className="mb-3" controlId="formName">
                             <FloatingLabel controlId="floatingName" label="First Name" className="mb-3">
                                 <Form.Control
@@ -82,7 +106,7 @@ const HomePage = () => {
                             >
                                 <option hidden value="">Select a category</option>
                                 {categories.map((cat) => (
-                                    <option key={cat.value} value={cat.value}>{cat.label}</option>
+                                    <option key={cat.id} value={cat.id}>{cat.name}</option>
                                 ))}
                                 
                             </Form.Select>
@@ -102,7 +126,7 @@ const HomePage = () => {
                             >
                                 <option hidden value="">Select a difficulty level</option>
                                 {difficulties.map((level) => (
-                                    <option key={level.id} value={level.id}>{level.name}</option>
+                                    <option key={level.value} value={level.value}>{level.label}</option>
                                 ))}
                             </Form.Select>
 
