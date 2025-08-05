@@ -13,8 +13,8 @@ const HomePage = () => {
         category: '',
         difficulty: ''
     });
-
     const [difficulties, setDifficulties] = useState([]);
+    const [error, setError] = useState('');
 
     useEffect(() => {
         axios.get('https://opentdb.com/api_category.php')
@@ -22,11 +22,11 @@ const HomePage = () => {
             // console.log(response);
             // console.log(response.data);
             // console.log(response.data.trivia_categories);
-            console.log(response.data.trivia_categories[0]);
+            // console.log(response.data.trivia_categories[0]);
             setDifficulties(response.data.trivia_categories);
         })
         .catch(error => {
-            console.log(error);
+            setError("Error fetching form data. Please contact an admin. " + error)
         });
     }, []);
 
@@ -52,7 +52,7 @@ const HomePage = () => {
                     <Card.Title as="h1" className="text-center mb-3">Welcome to QuizApp!</Card.Title>
                     <Card.Text className="text-muted text-center mb-4">🎯 Get ready to test your knowledge!<br />Just fill out the details below to get started.</Card.Text>
 
-                    <Alert variant="danger">Error Message</Alert>
+                    {error && <Alert variant="danger">{error}</Alert>}
 
                     <Form noValidate validated>
                         <Form.Group className="mb-3" controlId="formName">
