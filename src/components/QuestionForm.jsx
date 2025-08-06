@@ -14,6 +14,7 @@ const QuestionForm = ({ formData, questions, setQuestions }) => {
     const [validated, setValidated] = useState(false);
     const [error, setError] = useState("");
     const navigate = useNavigate();
+    const NUMBER_OF_QUESTIONS = 10;
 
     const shuffleArray = (arr) => [...arr].sort(() => Math.random() - 0.5);
 
@@ -22,7 +23,7 @@ const QuestionForm = ({ formData, questions, setQuestions }) => {
         // console.log(formData.difficulty);
         if(!formData.category || !formData.difficulty || questions.length > 0) return;
         // console.log("Passed if");
-        axios.get(`https://opentdb.com/api.php?amount=10&category=${formData.category}&difficulty=${formData.difficulty}&type=multiple`)
+        axios.get(`https://opentdb.com/api.php?amount=${NUMBER_OF_QUESTIONS}&category=${formData.category}&difficulty=${formData.difficulty}&type=multiple`)
         .then(response => {
             // console.log(response);
             // console.log(response.data);
@@ -40,7 +41,7 @@ const QuestionForm = ({ formData, questions, setQuestions }) => {
             setError("Error fetching questions. Please try again later. " + error.message);
             console.log(error.message);
         });
-    }, [formData.category, formData.difficulty, questions.length]);
+    }, [formData.category, formData.difficulty, questions.length, setQuestions]);
 
     useEffect(() => {
         setCurrentQuestion(questions[0]);
@@ -59,7 +60,7 @@ const QuestionForm = ({ formData, questions, setQuestions }) => {
             setSelectedAnswer(null);
             setAllSelectedAnswers([...allSelectedAnswers, selectedAnswer]);
             setValidated(false);
-            if(currentQuestion.question_number >= 10) navigate('/results');
+            if(currentQuestion.question_number >= NUMBER_OF_QUESTIONS) navigate('/results');
             setCurrentQuestion(questions[currentQuestion?.question_number]);
         }
     };
@@ -116,7 +117,7 @@ const QuestionForm = ({ formData, questions, setQuestions }) => {
                         )}
 
                         <div className="d-grid mt-3">
-                            <Button type="submit" variant="primary">{currentQuestion?.question_number < 10 || !selectedAnswer ? "Submit Answer" : "Check Results"}</Button>
+                            <Button type="submit" variant="primary">{currentQuestion?.question_number < NUMBER_OF_QUESTIONS || !selectedAnswer ? "Submit Answer" : "Check Results"}</Button>
                         </div>
                     </Form>
                 </Card.Body>
