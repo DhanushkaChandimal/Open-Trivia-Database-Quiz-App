@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import Container from 'react-bootstrap/Container';
 import Card from 'react-bootstrap/Card';
@@ -7,16 +8,11 @@ import Button from 'react-bootstrap/Button';
 import Alert from 'react-bootstrap/Alert';
 import FloatingLabel from 'react-bootstrap/FloatingLabel';
 
-const HomePage = () => {
-    const [formData, setFormData] = useState({
-        name: '',
-        category: '',
-        difficulty: ''
-    });
+const HomePage = ({formData, setFormData}) => {
     const [categories, setCategories] = useState([]);
     const [error, setError] = useState('');
     const [validated, setValidated] = useState(false);
-    const [questions, setQuestions] = useState([]);
+    const navigate = useNavigate();
 
     useEffect(() => {
         axios.get('https://opentdb.com/api_category.php')
@@ -53,18 +49,7 @@ const HomePage = () => {
         if (form.checkValidity() === false) {
             e.stopPropagation();
         } else {
-            console.log(formData.category);
-            console.log(formData.difficulty);
-            axios.get(`https://opentdb.com/api.php?amount=10&category=${formData.category}&difficulty=${formData.difficulty}&type=multiple`)
-            .then(response => {
-                // console.log(response);
-                // console.log(response.data);
-                // console.log(response.data.results);
-                setQuestions(response.data.results);
-            })
-            .catch(error => {
-                setError("Error fetching form data. Please contact an admin. " + error)
-            });
+            navigate('/questions'); 
         }
         setValidated(true);
     };
