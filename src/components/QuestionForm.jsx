@@ -10,6 +10,8 @@ const QuestionForm = ({ formData }) => {
     const [currentQuestion, setCurrentQuestion] = useState([]);
     const [error, setError] = useState("");
 
+    const shuffleArray = (arr) => [...arr].sort(() => Math.random() - 0.5);
+
     useEffect(() => {
         // console.log(formData.category);
         // console.log(formData.difficulty);
@@ -23,7 +25,7 @@ const QuestionForm = ({ formData }) => {
             setQuestions(response.data.results.map((question, index) => {
                 return {
                     ...question,
-                    all_answers: [...question.incorrect_answers, question.correct_answer],
+                    all_answers: shuffleArray([...question.incorrect_answers, question.correct_answer]),
                     question_number: index + 1
                 };
             }));
