@@ -8,8 +8,6 @@ import Container from 'react-bootstrap/Container';
 const QuestionForm = ({ formData }) => {
     const [questions, setQuestions] = useState([]);
     const [currentQuestion, setCurrentQuestion] = useState([]);
-    const [currentAnswers, setCurrentAnswers] = useState([]);
-    const [questionNumber, setQuestionNumber] = useState(1);
     const [error, setError] = useState("");
 
     useEffect(() => {
@@ -22,12 +20,13 @@ const QuestionForm = ({ formData }) => {
             // console.log(response);
             // console.log(response.data);
             // console.log(response.data.results);
-            setQuestions(response.data.results);
-            setCurrentQuestion(response.data.results[0]);
-            setCurrentAnswers([
-                ...response.data.results[0].incorrect_answers,
-                response.data.results[0].correct_answer
-            ]);
+            setQuestions(response.data.results.map((question, index) => {
+                return {
+                    ...question,
+                    all_answers:[...response.data.results[0].incorrect_answers, response.data.results[0].correct_answer],
+                    question_number: index + 1
+                };
+            }));
             setError("");
         })
         .catch(error => {
@@ -35,9 +34,10 @@ const QuestionForm = ({ formData }) => {
         });
     }, [formData.category, formData.difficulty]);
 
-    // useEffect(() => {
-    //     console.log(questions);
-    // }, [questions]);
+    useEffect(() => {
+        setCurrentQuestion(questions[0]);
+        console.log(questions);
+    }, [questions]);
 
     return (
         <Container className="d-flex vh-100 justify-content-center align-items-center bg-light">
@@ -45,12 +45,12 @@ const QuestionForm = ({ formData }) => {
             {/* <Card className="shadow p-4 mb-4"> */}
                 <Card.Body>
                     <Card.Title as="h4" className="mb-3">
-                        Question {questionNumber} : Category: {formData.category} | Difficulty: {formData.difficulty}
+                        Question {currentQuestion.question_number} : Category: {formData.category} | Difficulty: {formData.difficulty}
                     </Card.Title>
                     <Card.Text className="mb-4" dangerouslySetInnerHTML={{ __html: currentQuestion.question }} />
 
                     <Form>
-                        {currentAnswers.map((answer, idx) => (
+                        {currentQuestion.all_answers?.map((answer, idx) => (
                             <Form.Check
                                 key={idx}
                                 type="radio"
