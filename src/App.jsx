@@ -2,6 +2,7 @@ import { Routes, Route } from "react-router-dom"
 import { useState } from 'react';
 import HomePage from "./components/HomePage"
 import QuestionForm from "./components/QuestionForm"
+import ResultPage from "./components/ResultPage"
 
 function App() {
   const [formData, setFormData] = useState({
@@ -10,17 +11,12 @@ function App() {
     difficulty: ''
   });
 
-  const updateFormData = (name, cat, diff) => setFormData({
-    name: name,
-    category: cat,
-    difficulty: diff
-  });
-
   return (
     <>
       <Routes>
         <Route path = "/" element = {<HomePage formData={formData} setFormData={setFormData}/>}/>
-        <Route path = "/questions" element = {<QuestionForm formData={formData} updateFormData={updateFormData}/>}/>
+        <Route path = "/questions" element = {<QuestionForm formData={formData}/>}/>
+        <Route path = "/results" element = {<ResultPage/>}/>
       </Routes>
     </>
   )

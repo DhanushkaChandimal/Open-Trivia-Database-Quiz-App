@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import Card from 'react-bootstrap/Card';
 import Form from 'react-bootstrap/Form';
@@ -13,6 +14,7 @@ const QuestionForm = ({ formData }) => {
     const [allSelectedAnswers, setAllSelectedAnswers] = useState([]);
     const [validated, setValidated] = useState(false);
     const [error, setError] = useState("");
+    const navigate = useNavigate();
 
     const shuffleArray = (arr) => [...arr].sort(() => Math.random() - 0.5);
 
@@ -57,8 +59,9 @@ const QuestionForm = ({ formData }) => {
             setError("");
             setSelectedAnswer(null);
             setAllSelectedAnswers([...allSelectedAnswers, selectedAnswer]);
-            setCurrentQuestion(questions[currentQuestion.question_number]);
             setValidated(false);
+            if(currentQuestion.question_number >= 10) navigate('/results');
+            setCurrentQuestion(questions[currentQuestion?.question_number]);
         }
     };
 
@@ -114,7 +117,7 @@ const QuestionForm = ({ formData }) => {
                         )}
 
                         <div className="d-grid mt-3">
-                            <Button type="submit" variant="primary">Submit Answer</Button>
+                            <Button type="submit" variant="primary">{currentQuestion?.question_number < 10 || !selectedAnswer ? "Submit Answer" : "Check Results"}</Button>
                         </div>
                     </Form>
                 </Card.Body>
