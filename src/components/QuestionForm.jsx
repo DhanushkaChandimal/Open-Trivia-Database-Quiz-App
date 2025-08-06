@@ -7,8 +7,7 @@ import Button from 'react-bootstrap/Button';
 import Container from 'react-bootstrap/Container';
 import Alert from 'react-bootstrap/Alert';
 
-const QuestionForm = ({ formData }) => {
-    const [questions, setQuestions] = useState([]);
+const QuestionForm = ({ formData, questions, setQuestions }) => {
     const [currentQuestion, setCurrentQuestion] = useState([]);
     const [selectedAnswer, setSelectedAnswer] = useState();
     const [allSelectedAnswers, setAllSelectedAnswers] = useState([]);

@@ -10,12 +10,13 @@ function App() {
     category: '',
     difficulty: ''
   });
+  const [questions, setQuestions] = useState([]);
 
   return (
     <>
       <Routes>
         <Route path = "/" element = {<HomePage formData={formData} setFormData={setFormData}/>}/>
-        <Route path = "/questions" element = {<QuestionForm formData={formData}/>}/>
+        <Route path = "/questions" element = {<QuestionForm formData={formData} questions={questions} setQuestions={setQuestions}/>}/>
         <Route path = "/results" element = {<ResultPage/>}/>
       </Routes>
     </>
