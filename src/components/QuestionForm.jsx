@@ -39,7 +39,7 @@ const QuestionForm = ({ formData }) => {
             setError("Error fetching questions. Please try again later. " + error.message);
             console.log(error.message);
         });
-    }, [formData.category, formData.difficulty]);
+    }, [formData.category, formData.difficulty, questions.length]);
 
     useEffect(() => {
         setCurrentQuestion(questions[0]);
@@ -61,6 +61,23 @@ const QuestionForm = ({ formData }) => {
             setValidated(false);
         }
     };
+
+    if (error){
+        return (
+            <Container className="d-flex vh-100 justify-content-center align-items-center bg-light">
+                <Card className="shadow p-4 w-100" style={{ maxWidth: '600px' }}>
+                    <Card.Body>
+                        <Card.Title as="h2" className="text-danger mb-3">⚠️ Error</Card.Title>
+                        <Card.Text className="mb-4">
+                            {error}
+                        </Card.Text>
+
+                        <Button variant="primary" href="/">Home Page</Button>
+                    </Card.Body>
+                </Card>
+            </Container>
+        );
+    }
 
     return (
         <Container className="d-flex vh-100 justify-content-center align-items-center bg-light">
