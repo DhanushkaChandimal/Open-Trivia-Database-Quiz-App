@@ -4,10 +4,14 @@ import Card from 'react-bootstrap/Card';
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
 import Container from 'react-bootstrap/Container';
+import Alert from 'react-bootstrap/Alert';
 
 const QuestionForm = ({ formData }) => {
     const [questions, setQuestions] = useState([]);
     const [currentQuestion, setCurrentQuestion] = useState([]);
+    const [selectedAnswer, setSelectedAnswer] = useState();
+    const [allSelectedAnswers, setAllSelectedAnswers] = useState([]);
+    const [validated, setValidated] = useState(false);
     const [error, setError] = useState("");
 
     const shuffleArray = (arr) => [...arr].sort(() => Math.random() - 0.5);
@@ -33,6 +37,7 @@ const QuestionForm = ({ formData }) => {
         })
         .catch(error => {
             setError("Error fetching questions. Please try again later. " + error.message);
+            console.log(error.message);
         });
     }, [formData.category, formData.difficulty]);
 
@@ -41,17 +46,35 @@ const QuestionForm = ({ formData }) => {
         console.log(questions);
     }, [questions]);
 
+    const handleSubmit = (e) => {
+        setValidated(true);
+        e.preventDefault();
+
+        const form = e.currentTarget;
+        if (form.checkValidity() === false) {
+            e.stopPropagation();
+        } else {
+            setError("");
+            setSelectedAnswer(null);
+            setAllSelectedAnswers([...allSelectedAnswers, selectedAnswer]);
+            setCurrentQuestion(questions[currentQuestion.question_number]);
+            setValidated(false);
+        }
+    };
+
     return (
         <Container className="d-flex vh-100 justify-content-center align-items-center bg-light">
             <Card className="shadow p-4 w-100" style={{ maxWidth: '600px' }}>
-            {/* <Card className="shadow p-4 mb-4"> */}
                 <Card.Body>
+                    
                     <Card.Title as="h4" className="mb-3">
                         Question {currentQuestion?.question_number} : Category: {formData.category} | Difficulty: {formData.difficulty}
                     </Card.Title>
                     <Card.Text className="mb-4" dangerouslySetInnerHTML={{ __html: currentQuestion?.question }} />
 
-                    <Form>
+                    {error && <Alert variant="warning">{error}</Alert>}
+
+                    <Form onSubmit={handleSubmit} noValidate validated={validated}>
                         {currentQuestion?.all_answers?.map((answer, idx) => (
                             <Form.Check
                                 key={idx}
@@ -61,8 +84,17 @@ const QuestionForm = ({ formData }) => {
                                 name="quiz-answer"
                                 value={answer}
                                 className="mb-2"
+                                checked={selectedAnswer === answer}
+                                onChange={(e) => setSelectedAnswer(e.target.value)}
+                                required
                             />
                         ))}
+
+                        {validated && !selectedAnswer && (
+                            <Form.Control.Feedback type="invalid" className="d-block">
+                                Please select an answer
+                            </Form.Control.Feedback>
+                        )}
 
                         <div className="d-grid mt-3">
                             <Button type="submit" variant="primary">Submit Answer</Button>
