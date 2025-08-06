@@ -23,7 +23,7 @@ const QuestionForm = ({ formData }) => {
             setQuestions(response.data.results.map((question, index) => {
                 return {
                     ...question,
-                    all_answers:[...response.data.results[0].incorrect_answers, response.data.results[0].correct_answer],
+                    all_answers: [...question.incorrect_answers, question.correct_answer],
                     question_number: index + 1
                 };
             }));
@@ -45,12 +45,12 @@ const QuestionForm = ({ formData }) => {
             {/* <Card className="shadow p-4 mb-4"> */}
                 <Card.Body>
                     <Card.Title as="h4" className="mb-3">
-                        Question {currentQuestion.question_number} : Category: {formData.category} | Difficulty: {formData.difficulty}
+                        Question {currentQuestion?.question_number} : Category: {formData.category} | Difficulty: {formData.difficulty}
                     </Card.Title>
-                    <Card.Text className="mb-4" dangerouslySetInnerHTML={{ __html: currentQuestion.question }} />
+                    <Card.Text className="mb-4" dangerouslySetInnerHTML={{ __html: currentQuestion?.question }} />
 
                     <Form>
-                        {currentQuestion.all_answers?.map((answer, idx) => (
+                        {currentQuestion?.all_answers?.map((answer, idx) => (
                             <Form.Check
                                 key={idx}
                                 type="radio"
