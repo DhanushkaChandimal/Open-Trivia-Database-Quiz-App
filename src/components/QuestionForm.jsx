@@ -45,7 +45,7 @@ const QuestionForm = ({ formData, questions, setQuestions }) => {
 
     useEffect(() => {
         setCurrentQuestion(questions[0]);
-        console.log(questions);
+        // console.log(questions);
     }, [questions]);
 
     const handleSubmit = (e) => {
@@ -56,11 +56,20 @@ const QuestionForm = ({ formData, questions, setQuestions }) => {
         if (form.checkValidity() === false) {
             e.stopPropagation();
         } else {
-            setError("");
-            setSelectedAnswer(null);
             setAllSelectedAnswers([...allSelectedAnswers, selectedAnswer]);
             setValidated(false);
-            if(currentQuestion.question_number >= NUMBER_OF_QUESTIONS) navigate('/results');
+            setSelectedAnswer(null);
+            setError("");
+            if(currentQuestion.question_number >= NUMBER_OF_QUESTIONS){
+                setQuestions(questions.map((question) => {
+                    return {
+                        ...question,
+                        selected_answer: allSelectedAnswers[question.question_number-1],
+                        is_correct: allSelectedAnswers[question.question_number-1] === question.correct_answer
+                    };
+                }));
+                navigate('/results');
+            }
             setCurrentQuestion(questions[currentQuestion?.question_number]);
         }
     };
