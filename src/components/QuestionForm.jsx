@@ -97,7 +97,7 @@ const QuestionForm = ({ formData, questions, setQuestions }) => {
                 <Card.Body>
                     
                     <Card.Title as="h4" className="mb-3">
-                        Question {currentQuestion?.question_number} : Category: {formData.category} | Difficulty: {formData.difficulty}
+                        Question {currentQuestion?.question_number}
                     </Card.Title>
                     <Card.Text className="mb-4" dangerouslySetInnerHTML={{ __html: currentQuestion?.question }} />
 

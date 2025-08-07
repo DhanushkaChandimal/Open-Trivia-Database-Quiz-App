@@ -1,8 +1,12 @@
 import { useEffect, useState } from 'react';
-import { Card, Button, Container } from 'react-bootstrap';
+import { useNavigate } from 'react-router-dom';
+import Container from 'react-bootstrap/Container';
+import Card from 'react-bootstrap/Card';
+import Button from 'react-bootstrap/Button';
 
-const ResultPage = ({ questions, formData }) => {
+const ResultPage = ({ questions, formData, setQuestions }) => {
     const [isExpand, setIsExpand] = useState(false);
+    const navigate = useNavigate();
 
     const getMessage = (correct, total) => {
 
@@ -17,6 +21,11 @@ const ResultPage = ({ questions, formData }) => {
         } else {
             return "😅 It’s okay! Try again and do better next time!";
         }
+    };
+
+    const btnTryAgainOnClick = () => {
+        setQuestions([]);
+        navigate("/questions");
     };
     
     useEffect(() => {
@@ -64,7 +73,7 @@ const ResultPage = ({ questions, formData }) => {
                     </div>)}
 
                     <Button variant="primary" size="lg" onClick={() => setIsExpand(!isExpand)}>{!isExpand ? "Show More" : "Show Less"}</Button>
-                    <Button variant="primary" size="lg" className='mx-3'>🔁 Try Again</Button>
+                    <Button variant="primary" size="lg" className='mx-3' onClick={btnTryAgainOnClick}>🔁 Try Again</Button>
                     <Button variant="primary" size="lg" href='/'>Home</Button>
                 </Card.Body>
             </Card>
