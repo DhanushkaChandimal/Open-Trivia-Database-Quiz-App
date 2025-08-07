@@ -92,7 +92,7 @@ const QuestionForm = ({ formData, questions, setQuestions }) => {
     }
 
     return (
-        <Container className="d-flex vh-100 justify-content-center align-items-center bg-light">
+        <Container className="py-5 bg-light d-flex justify-content-center">
             <Card className="shadow p-4 w-100" style={{ maxWidth: '600px' }}>
                 <Card.Body>
                     

@@ -55,7 +55,7 @@ const HomePage = ({formData, setFormData}) => {
     };
     
     return (
-        <Container className="d-flex vh-100 justify-content-center align-items-center bg-light">
+        <Container className="py-5 bg-light d-flex justify-content-center bg-light">
             <Card className="shadow p-4 w-100" style={{ maxWidth: '600px' }}>
                 <Card.Body>
                     <Card.Title as="h1" className="text-center mb-3">Welcome to QuizApp!</Card.Title>
