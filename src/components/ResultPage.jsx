@@ -1,7 +1,9 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { Card, Button, Container } from 'react-bootstrap';
 
 const ResultPage = ({ questions, formData }) => {
+    const [isExpand, setIsExpand] = useState(false);
+
     const getMessage = (correct, total) => {
 
         let percentage = correct / total * 100;
@@ -22,22 +24,46 @@ const ResultPage = ({ questions, formData }) => {
     }, [questions]);
 
     return (
-        <Container className="d-flex vh-100 justify-content-center align-items-center bg-light">
+        // <Container className="d-flex vh-100 justify-content-center align-items-center bg-light">
+        <Container className="py-5 bg-light d-flex justify-content-center">
             <Card className="text-center shadow p-4 w-100" style={{ maxWidth: '600px'}}>
                 <Card.Body>
                     <Card.Title as="h2" className="mb-3">🎉 {formData.name}, here is your result</Card.Title>
                     <Card.Text className="fs-4 mb-4">
                         You scored <strong>{questions.filter(q => q.is_correct === true).length}</strong> out of <strong>{questions.length}</strong>
                     </Card.Text>
-                    <Card.Text className="fs-5 text-muted mb-1">{getMessage(questions.filter(q => q.is_correct === true).length, questions.length)}</Card.Text>
-                    <Card.Text className="fs-5 mb-4">
+                    <Card.Text className="fs-5 text-muted mb-4">{getMessage(questions.filter(q => q.is_correct === true).length, questions.length)}</Card.Text>
+                    {!isExpand && (<Card.Text className="fs-5 mb-4">
                         {questions.map(q => (
-                            <span key={q.question_number} style={{display: 'inline-block', marginRight: 8}}>
-                                {q.question_number}: <span>{q.is_correct ? '✅' : '❌'} | </span>
+                            <span className='d-inline-block me-2' key={q.question_number}>
+                                {q.question_number}: {q.is_correct ? '✅' : '❌'} |
                             </span>
                         ))}
-                    </Card.Text>
+                    </Card.Text>)}
 
+                    {isExpand && (<div className="fs-5 mb-4 text-start"> 
+                        <ol>
+                            {questions.map((q, index) => {
+                                return (
+                                <li key={index} className="mb-3">
+                                    <div dangerouslySetInnerHTML={{ __html: q.question }} />
+                                    {q.selected_answer === q.correct_answer ? (
+                                    <div className="text-success mt-1">
+                                        ✅ Your answer is correct: <strong>{q.selected_answer}</strong>
+                                    </div>
+                                    ) : (
+                                    <div className="text-danger mt-1">
+                                        ❌ Your answer: <strong>{q.selected_answer}</strong><br />
+                                        ✅ Correct answer: <strong>{q.correct_answer}</strong>
+                                    </div>
+                                    )}
+                                </li>
+                                );
+                            })}
+                        </ol>
+                    </div>)}
+
+                    <Button variant="primary" size="lg" onClick={() => setIsExpand(!isExpand)}>{!isExpand ? "Show More" : "Show Less"}</Button>
                     <Button variant="primary" size="lg" className='mx-3'>🔁 Try Again</Button>
                     <Button variant="primary" size="lg" href='/'>Home</Button>
                 </Card.Body>
