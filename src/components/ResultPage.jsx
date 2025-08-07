@@ -29,7 +29,14 @@ const ResultPage = ({ questions, formData }) => {
                     <Card.Text className="fs-4 mb-4">
                         You scored <strong>{questions.filter(q => q.is_correct === true).length}</strong> out of <strong>{questions.length}</strong>
                     </Card.Text>
-                    <Card.Text className="fs-5 text-muted mb-4">{getMessage(questions.filter(q => q.is_correct === true).length, questions.length)}</Card.Text>
+                    <Card.Text className="fs-5 text-muted mb-1">{getMessage(questions.filter(q => q.is_correct === true).length, questions.length)}</Card.Text>
+                    <Card.Text className="fs-5 mb-4">
+                        {questions.map(q => (
+                            <span key={q.question_number} style={{display: 'inline-block', marginRight: 8}}>
+                                {q.question_number}: <span>{q.is_correct ? '✅' : '❌'} | </span>
+                            </span>
+                        ))}
+                    </Card.Text>
 
                     <Button variant="primary" size="lg" className='mx-3'>🔁 Try Again</Button>
                     <Button variant="primary" size="lg" href='/'>Home</Button>
