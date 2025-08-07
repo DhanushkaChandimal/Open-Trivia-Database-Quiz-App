@@ -19,15 +19,9 @@ const QuestionForm = ({ formData, questions, setQuestions }) => {
     const shuffleArray = (arr) => [...arr].sort(() => Math.random() - 0.5);
 
     useEffect(() => {
-        // console.log(formData.category);
-        // console.log(formData.difficulty);
         if(!formData.category || !formData.difficulty || questions.length > 0) return;
-        // console.log("Passed if");
         axios.get(`https://opentdb.com/api.php?amount=${NUMBER_OF_QUESTIONS}&category=${formData.category}&difficulty=${formData.difficulty}&type=multiple`)
         .then(response => {
-            // console.log(response);
-            // console.log(response.data);
-            // console.log(response.data.results);
             setQuestions(response.data.results.map((question, index) => {
                 return {
                     ...question,
@@ -39,13 +33,11 @@ const QuestionForm = ({ formData, questions, setQuestions }) => {
         })
         .catch(error => {
             setError("Error fetching questions. Please try again later. " + error.message);
-            console.log(error.message);
         });
     }, [formData.category, formData.difficulty, questions.length, setQuestions]);
 
     useEffect(() => {
         setCurrentQuestion(questions[0]);
-        // console.log(questions);
     }, [questions]);
 
     const handleSubmit = (e) => {

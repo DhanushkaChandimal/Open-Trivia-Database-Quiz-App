@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Container from 'react-bootstrap/Container';
 import Card from 'react-bootstrap/Card';
@@ -27,10 +27,6 @@ const ResultPage = ({ questions, formData, setQuestions }) => {
         setQuestions([]);
         navigate("/questions");
     };
-    
-    useEffect(() => {
-        console.log(questions);
-    }, [questions]);
 
     return (
         <Container className="py-5 bg-light d-flex justify-content-center">

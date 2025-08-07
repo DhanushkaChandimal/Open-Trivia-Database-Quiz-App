@@ -17,10 +17,6 @@ const HomePage = ({formData, setFormData}) => {
     useEffect(() => {
         axios.get('https://opentdb.com/api_category.php')
         .then(response => {
-            // console.log(response);
-            // console.log(response.data);
-            // console.log(response.data.trivia_categories);
-            // console.log(response.data.trivia_categories[0]);
             setCategories(response.data.trivia_categories);
         })
         .catch(error => {
